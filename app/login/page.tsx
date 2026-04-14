@@ -41,47 +41,13 @@ export default function LoginPage() {
       process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL ??
       `${window.location.origin}/auth/callback`;
 
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
         redirectTo: redirectUrl,
-        skipBrowserRedirect: process.env.NODE_ENV === "production", // false for production
       },
     });
-
-    if (error || !data.url) {
-      setIsLoading(false);
-      return;
-    }
-
-    const width = 500;
-    const height = 600;
-    const left = window.screenX + (window.outerWidth - width) / 2;
-    const top = window.screenY + (window.outerHeight - height) / 2;
-
-    const popup = window.open(
-      data.url,
-      "google-oauth",
-      `width=${width},height=${height},left=${left},top=${top},popup=true`,
-    );
-
-    const supabaseClient = createClient();
-
-    const interval = setInterval(async () => {
-      const { data } = await supabaseClient.auth.getSession();
-
-      if (data.session) {
-        clearInterval(interval);
-        popup?.close();
-        router.replace("/dashboard");
-      }
-
-      if (!popup || popup.closed) {
-        clearInterval(interval);
-        setIsLoading(false);
-      }
-    }, 500);
-  }, [router]);
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col relative">

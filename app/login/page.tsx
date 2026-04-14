@@ -45,7 +45,7 @@ export default function LoginPage() {
       provider: "google",
       options: {
         redirectTo: redirectUrl,
-        skipBrowserRedirect: false, // false for production
+        skipBrowserRedirect: process.env.NODE_ENV === "production", // false for production
       },
     });
 

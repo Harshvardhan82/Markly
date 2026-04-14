@@ -45,7 +45,7 @@ export default function LoginPage() {
       provider: "google",
       options: {
         redirectTo: redirectUrl,
-        skipBrowserRedirect: true,
+        skipBrowserRedirect: false, // false for production
       },
     });
 
